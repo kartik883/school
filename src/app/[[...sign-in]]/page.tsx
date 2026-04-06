@@ -12,13 +12,23 @@ const LoginPage = () => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    const role = user?.publicMetadata.role;
+ useEffect(() => {
+  if (!isLoaded) return;
 
-    if (role) {
-      router.push(`/${role}`);
+  if (isSignedIn && user) {
+    const role = (user.publicMetadata as { role?: string })?.role;
+
+    console.log("Role:", role);
+
+    if (role === "admin") {
+      router.replace("/admin");
+    } else if (role === "student") {
+      router.replace("/student");
+    } else if (role === "teacher") {
+      router.replace("/teacher");
     }
-  }, [user, router]);
+  }
+}, [isLoaded, isSignedIn, user, router]);
 
   return (
     <div className="h-screen flex items-center justify-center bg-lamaSkyLight">
