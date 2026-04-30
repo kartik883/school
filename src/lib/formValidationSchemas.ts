@@ -87,3 +87,103 @@ export const examSchema = z.object({
 });
 
 export type ExamSchema = z.infer<typeof examSchema>;
+
+export const parentSchema = z.object({
+  id: z.string().optional(),
+  username: z.string().min(3).max(20),
+  password: z.string().min(8).optional().or(z.literal("")),
+  name: z.string().min(1),
+  surname: z.string().min(1),
+  email: z.string().email().optional().or(z.literal("")),
+  phone: z.string().min(1),
+  address: z.string().min(1),
+});
+
+export type ParentSchema = z.infer<typeof parentSchema>;
+
+export const lessonSchema = z.object({
+  id: z.coerce.number().optional(),
+  name: z.string().min(1),
+  day: z.enum(["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]),
+  startTime: z.coerce.date(),
+  endTime: z.coerce.date(),
+  subjectId: z.coerce.number(),
+  classId: z.coerce.number(),
+  teacherId: z.string(),
+});
+
+export type LessonSchema = z.infer<typeof lessonSchema>;
+
+export const assignmentSchema = z.object({
+  id: z.coerce.number().optional(),
+  title: z.string().min(1),
+  startDate: z.coerce.date(),
+  dueDate: z.coerce.date(),
+  lessonId: z.coerce.number(),
+});
+
+export type AssignmentSchema = z.infer<typeof assignmentSchema>;
+
+export const resultSchema = z.object({
+  id: z.coerce.number().optional(),
+  score: z.coerce.number().min(0).max(100),
+  examId: z.coerce.number().optional(),
+  assignmentId: z.coerce.number().optional(),
+  studentId: z.string(),
+});
+
+export type ResultSchema = z.infer<typeof resultSchema>;
+
+export const attendanceSchema = z.object({
+  id: z.coerce.number().optional(),
+  date: z.coerce.date(),
+  present: z.boolean(),
+  studentId: z.string(),
+  lessonId: z.coerce.number(),
+});
+
+export type AttendanceSchema = z.infer<typeof attendanceSchema>;
+
+export const eventSchema = z.object({
+  id: z.coerce.number().optional(),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  startTime: z.coerce.date(),
+  endTime: z.coerce.date(),
+  classId: z.coerce.number().optional(),
+});
+
+export type EventSchema = z.infer<typeof eventSchema>;
+
+export const announcementSchema = z.object({
+  id: z.coerce.number().optional(),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  date: z.coerce.date(),
+  classId: z.coerce.number().optional(),
+});
+
+export type AnnouncementSchema = z.infer<typeof announcementSchema>;
+
+export const financeSchema = z.object({
+  id: z.coerce.number().optional(),
+  name: z.string().min(1),
+  income: z.coerce.number().min(0),
+  expense: z.coerce.number().min(0),
+  date: z.coerce.date(),
+});
+
+export type FinanceSchema = z.infer<typeof financeSchema>;
+
+export const feeSchema = z.object({
+  id: z.coerce.number().optional(),
+  amount: z.coerce.number().min(0),
+  amountPaid: z.coerce.number().min(0),
+  status: z.enum(["PENDING", "PARTIAL", "PAID"]),
+  dueDate: z.coerce.date(),
+  description: z.string().min(1),
+  studentId: z.string(),
+  parentId: z.string(),
+});
+
+export type FeeSchema = z.infer<typeof feeSchema>;

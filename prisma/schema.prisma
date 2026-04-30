@@ -32,6 +32,7 @@ model Student {
   grade       Grade        @relation(fields: [gradeId], references: [id])
   attendances Attendance[]
   results     Result[]
+  fees        Fee[]
   birthday    DateTime
 }
 
@@ -63,6 +64,7 @@ model Parent {
   address   String
   createdAt DateTime  @default(now())
   students  Student[]
+  fees      Fee[]
 }
 
 model Grade {
@@ -179,10 +181,19 @@ model Announcement {
   class   Class? @relation(fields: [classId], references: [id])
 }
 
+model Finance {
+  id      Int      @id @default(autoincrement())
+  name    String
+  income  Int
+  expense Int
+  date    DateTime
+}
+
 enum UserSex {
   MALE
   FEMALE
 }
+
 
 enum Day {
   MONDAY
@@ -191,3 +202,29 @@ enum Day {
   THURSDAY
   FRIDAY
 }
+
+model Fee {
+  id          Int      @id @default(autoincrement())
+  amount      Int      
+  amountPaid  Int      @default(0)
+  status      FeeStatus @default(PENDING)
+  dueDate     DateTime
+  description String
+
+  studentId   String
+  student     Student   @relation(fields: [studentId], references: [id])
+  parentId    String
+  parent      Parent    @relation(fields: [parentId], references: [id])
+
+  razorpayOrderId String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum FeeStatus {
+  PENDING
+  PARTIAL
+  PAID
+}
+
